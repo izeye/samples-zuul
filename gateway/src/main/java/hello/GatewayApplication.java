@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 
-import hello.filter.pre.SimpleFilter;
+import hello.filter.route.RoutingFilter;
 
 /**
  * Gateway application.
@@ -17,8 +17,8 @@ import hello.filter.pre.SimpleFilter;
 public class GatewayApplication {
 
 	@Bean
-	public SimpleFilter simpleFilter() {
-		return new SimpleFilter();
+	public RoutingFilter routingFilter() {
+		return new RoutingFilter();
 	}
 
 	public static void main(String[] args) {

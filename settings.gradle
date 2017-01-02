@@ -1,4 +1,5 @@
 rootProject.name = 'zuul'
 
 include 'book'
+include 'another-book'
 include 'gateway'

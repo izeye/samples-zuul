@@ -1,22 +1,25 @@
-package hello.filter.pre;
+package hello.filter.route;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.util.StringUtils;
+
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * Simple {@link ZuulFilter}.
+ * {@link ZuulFilter} for routing.
  *
  * @author Johnny Lim
  */
-@Slf4j
-public class SimpleFilter extends ZuulFilter {
+public class RoutingFilter extends ZuulFilter {
 
 	@Override
 	public String filterType() {
-		return "pre";
+		return "route";
 	}
 
 	@Override
@@ -33,7 +36,15 @@ public class SimpleFilter extends ZuulFilter {
 	public Object run() {
 		RequestContext currentContext = RequestContext.getCurrentContext();
 		HttpServletRequest request = currentContext.getRequest();
-		log.info("{} request to {}", request.getMethod(), request.getRequestURL());
+		String target = request.getParameter("target");
+		if (StringUtils.hasText(target)) {
+			try {
+				currentContext.setRouteHost(new URL("http://" + target));
+			}
+			catch (MalformedURLException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
 		return null;
 	}
 
